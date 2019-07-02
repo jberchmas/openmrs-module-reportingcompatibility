@@ -503,13 +503,17 @@ public class DataExportFunctions {
 	public List<List<Object>> getObsWithValues(Concept c, List<String> attrs, Integer size, boolean mostRecentFirst) {
 		if (attrs == null)
 			attrs = new Vector<String>();
-		
-		String key = c.getConceptId() + "";
+
+		String key;
+		if(mostRecentFirst)
+			key = "mostRecent_" + c.getConceptId() + "";
+		else
+			key = c.getConceptId() + "";
 		Map<Integer, List<List<Object>>> patientIdObsMap = conceptAttrObsMap.get(key);
 		if (patientIdObsMap == null) {
 			long start = System.currentTimeMillis();
 			//log.debug("getting obs list for concept: " + c + " and attr: " + attr);
-			
+
 			boolean needToFlipTheResults = false;
 			try {
 				patientIdObsMap = rcs.getObservationsValues(getPatientSetIfNotAllPatients(), c, attrs, size, mostRecentFirst);
@@ -520,7 +524,7 @@ public class DataExportFunctions {
 			}
 			
 			conceptAttrObsMap.put(key, patientIdObsMap);
-			
+
 			// some timing testing
 			if (log.isDebugEnabled())
 				log.debug("Time spent in db getting obs/patients for concept: " + key + ": " + (System.currentTimeMillis() - start));
@@ -858,7 +862,7 @@ public class DataExportFunctions {
 			returnList.add(blankRow);
 		
 		List<List<Object>> rList = returnList.subList(0, n);
-		
+
 		//for (Object o : rList)
 		//	log.debug("rList object: " + o);
 		
@@ -942,7 +946,7 @@ public class DataExportFunctions {
 			List<Object> o = obs.get(obs.size() - 1);
 			return o.get(0);
 		}
-		
+
 		log.info("Could not find an Obs with concept " + concept + " for patient " + patientId);
 		
 		return null;
@@ -986,7 +990,7 @@ public class DataExportFunctions {
 		if (obs.size() > 0) {
 			return obs.get(obs.size() - 1);
 		}
-		
+
 		log.info("Could not find an Obs with concept " + concept + " for patient " + patientId);
 		
 		return null;
