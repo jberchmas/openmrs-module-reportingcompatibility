@@ -506,7 +506,7 @@ public class DataExportFunctions {
 
 		String key;
 		if(mostRecentFirst)
-			key = c.getConceptId() + "_last";
+			key = "mostRecent_" + c.getConceptId() + "";
 		else
 			key = c.getConceptId() + "";
 		Map<Integer, List<List<Object>>> patientIdObsMap = conceptAttrObsMap.get(key);
